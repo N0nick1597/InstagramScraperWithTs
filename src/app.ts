@@ -1,28 +1,22 @@
-import { Connection } from 'typeorm';
-
-import Bootstrap from './Bootstrap';
-import { createDatabaseConnection } from './Config/Database/Connection';
-
-import UserController from './Modules/User/User.controller';
+import express from 'express';
 
 import Scraper from './Modules/Scraper/Scraper';
 
-console.log('starting node app...');
+console.log('Starting node app...');
 
-// createDatabaseConnection()
-//   .then((connections: Connection[]) => {
-// const app = new Bootstrap([new UserController()]);
+const app = express();
+const port = 1337;
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.use(express.static('src/html'));
+app.use('/css', express.static(__dirname + 'html/css'));
+app.use('/img', express.static(__dirname + 'html/img'));
+
+app.get('', (req, res) => {
+  res.sendFile(__dirname, +'./index.html');
+});
+
 const scraper = new Scraper();
 
-// app.listen();
-
 scraper.initializeScraper();
-
-// return connections.forEach((connection: Connection) => {
-//   console.log(`${connection.name} connection created`);
-//   // });
-// })
-// .catch((err) => {
-//   // console.error(err);
-//   // console.error(`MySql connection couldn't be created`);
-// });
